@@ -1,38 +1,48 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import "./App.css";
+import {
+  AssetUnlockedEvent,
+  AvatarCreator,
+  AvatarCreatorConfig,
+  AvatarExportedEvent,
+  UserAuthorizedEvent,
+  UserSetEvent,
+} from "@readyplayerme/react-avatar-creator";
+
+const config: AvatarCreatorConfig = {
+  clearCache: true,
+  bodyType: "fullbody",
+  quickStart: false,
+  language: "en",
+};
+
+const style = { width: "100%", height: "100vh", border: "none", margin: 0 };
 
 function App() {
-  const [count, setCount] = useState(0);
+  const handleOnUserSet = (event: UserSetEvent) => {
+    console.log(`User ID is: ${event.data.id}`);
+  };
 
+  const handleOnAvatarExported = (event: AvatarExportedEvent) => {
+    console.log(`Avatar URL is: ${event.data.url}`);
+  };
+
+  const handleUserAuthorized = (event: UserAuthorizedEvent) => {
+    console.log(`User is:`, event.data);
+  };
+
+  const handleAssetUnlocked = (event: AssetUnlockedEvent) => {
+    console.log(`Asset unlocked is: ${event.data.assetId}`);
+  };
   return (
-    <div className="App">
-      <div>
-        <a href="https://reactjs.org" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-      </div>
-      <h1>React + Vite</h1>
-      <h2>On CodeSandbox!</h2>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR.
-        </p>
-
-        <p>
-          Tip: you can use the inspector button next to address bar to click on
-          components in the preview and open the code in the editor!
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div style={{ width: "100vw", height: "100vh" }}>
+      <AvatarCreator
+        subdomain="demo"
+        config={config}
+        style={style}
+        onAvatarExported={handleOnAvatarExported}
+        onUserAuthorized={handleUserAuthorized}
+        onAssetUnlock={handleAssetUnlocked}
+        onUserSet={handleOnUserSet}
+      />
     </div>
   );
 }
